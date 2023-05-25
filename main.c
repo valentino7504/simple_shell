@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
 	int token_count = 0, i;
 
 	(void)argc;
-	(void) argv;
 	while (1)
 	{
 		printf("%s ", prompt);
@@ -25,7 +24,7 @@ int main(int argc, char *argv[])
 			exit(EXIT_SUCCESS);
 		args = tokenize(user_entry);
 		if (execute_command(args) == -1)
-			perror("Failed to execute command");
+			fprintf(stderr, "%s: No such file or directory\n", argv[0]);
 		for (i = 0; args[i] != NULL; i++)
 			token_count++;
 		free_args(args, token_count);
