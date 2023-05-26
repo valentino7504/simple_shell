@@ -27,6 +27,11 @@ int main(int argc, char *argv[])
 			free(user_entry);
 			break;
 		}
+		if (strspn(user_entry, " \t\n") == strlen(user_entry))
+		{
+			free(user_entry);
+			continue;
+		}
 		args = tokenize(user_entry);
 		if (execute_command(args) == -1)
 			fprintf(stderr, "%s: No such file or directory\n", argv[0]);

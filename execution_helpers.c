@@ -69,10 +69,14 @@ char *get_command(char *command)
 int execute_command(char **arguments)
 {
 	pid_t pid;
-	char *arg_copy = strdup(arguments[0]);
-	char *command = get_command(arg_copy);
+	char *arg_copy;
+	char *command;
 	int status;
 
+	if (arguments == NULL)
+		return (-1);
+	arg_copy = strdup(arguments[0]);
+	command = get_command(arg_copy);
 	if (command == NULL)
 		return (-1);
 	pid = fork();
