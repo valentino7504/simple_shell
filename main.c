@@ -5,27 +5,24 @@
  * @argv: The command line arguments.
  * Return: Always 0.
  */
-int main(int argc, char *argv[])
+int main(__attribute__((unused)) int argc, char *argv[])
 {
 	char *user_entry, **args;
-	int is_interactive = isatty(STDIN_FILENO);
+	int is_interactive = isatty(STDIN_FILENO), status = 0, command_status = 0;
 
-	(void)argc;
 	while (1)
 	{
-		if (is_interactive)
-			printf("$ ");
 		user_entry = read_user_input();
 		if (user_entry == NULL)
 		{
 			if (is_interactive)
 				printf("\n");
-			return (0);
+			exit(status);
 		}
 		if (strcmp(user_entry, "exit") == 0)
 		{
 			free(user_entry);
-			break;
+			exit(status);
 		}
 		if (strspn(user_entry, " \t\n") == strlen(user_entry))
 		{
@@ -33,10 +30,12 @@ int main(int argc, char *argv[])
 			continue;
 		}
 		args = tokenize(user_entry);
-		if (execute_command(args) == -1)
+		command_status = execute_command(args);
+		if (command_status == -1)
 			fprintf(stderr, "%s: No such file or directory\n", argv[0]);
+		status = command_status;
 		free_args(args);
 		free(user_entry);
 	}
-	return (0);
+	return (status);
 }

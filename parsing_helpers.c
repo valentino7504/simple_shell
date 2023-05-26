@@ -63,6 +63,8 @@ char *read_user_input()
 	char *user_entry = NULL;
 	size_t n = 0;
 
+	if (isatty(STDIN_FILENO))
+		printf("$ ");
 	characters_read = getline(&user_entry, &n, stdin);
 	if (characters_read == -1)
 	{

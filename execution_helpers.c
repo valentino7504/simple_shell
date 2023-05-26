@@ -71,7 +71,7 @@ int execute_command(char **arguments)
 	pid_t pid;
 	char *arg_copy;
 	char *command;
-	int status;
+	int status, command_status = 0;
 
 	if (arguments == NULL)
 		return (-1);
@@ -88,7 +88,8 @@ int execute_command(char **arguments)
 	}
 	else if (pid == 0)
 	{
-		if (execve(command, arguments, NULL) == -1)
+		command_status = execve(command, arguments, NULL);
+		if (command_status == -1)
 		{
 			free(command);
 			perror("Failed to execute command");
@@ -98,8 +99,10 @@ int execute_command(char **arguments)
 	else
 	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			command_status = WEXITSTATUS(status);
 		free(command);
 		free(arg_copy);
 	}
-	return (0);
+	return (command_status);
 }
