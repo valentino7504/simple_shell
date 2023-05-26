@@ -16,7 +16,7 @@ void print_error(const char *error_message, const int exit_code)
  */
 int get_token_count(char *user_entry)
 {
-	char *entry_copy = strdup(user_entry), *token;
+	char *entry_copy = _strdup(user_entry), *token;
 	int token_count = 0;
 
 	if (entry_copy == NULL)
@@ -46,7 +46,7 @@ char **tokenize(char *user_entry)
 	token = strtok(user_entry, " ");
 	for (i = 0; i < token_count; i++)
 	{
-		args[i] = strdup(token);
+		args[i] = _strdup(token);
 		token = strtok(NULL, " ");
 	}
 	args[i] = NULL;

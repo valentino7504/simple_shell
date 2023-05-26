@@ -15,4 +15,11 @@ char **tokenize(char *user_entry);
 char *prepend_bin(char *command);
 char *get_command(char *command);
 int execute_command(char **arguments);
+char *_strcat(char *dest, char *src);
+int _strcmp(char *s1, char *s2);
+int _strlen(char *s);
+char *_strdup(char *str);
+char *_strcpy(char *dest, char *src);
+int get_stop(char *s1, char *s2);
+unsigned int _strspn(char *s, char *accept);
 #endif

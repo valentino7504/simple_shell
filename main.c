@@ -19,12 +19,12 @@ int main(__attribute__((unused)) int argc, char *argv[])
 				printf("\n");
 			exit(status);
 		}
-		if (strcmp(user_entry, "exit") == 0)
+		if (_strcmp(user_entry, "exit") == 0)
 		{
 			free(user_entry);
 			exit(status);
 		}
-		if (strspn(user_entry, " \t\n") == strlen(user_entry))
+		if (_strspn(user_entry, " \t\n") == _strlen(user_entry))
 		{
 			free(user_entry);
 			continue;

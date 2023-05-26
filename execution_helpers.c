@@ -7,12 +7,12 @@
 char *prepend_bin(char *command)
 {
 	char *command_path = NULL;
-	int command_length = strlen(command);
+	int command_length = _strlen(command);
 
 	command_path = malloc(5 + command_length + 1);
-	strcpy(command_path, "/bin/");
-	strcat(command_path, command);
-	strcat(command_path, "\0");
+	_strcpy(command_path, "/bin/");
+	_strcat(command_path, command);
+	_strcat(command_path, "\0");
 	return (command_path);
 }
 /**
@@ -23,7 +23,7 @@ char *prepend_bin(char *command)
 char *get_command(char *command)
 {
 	char *path, *path_copy, *path_token, *command_path = prepend_bin(command);
-	int command_length = strlen(command), directory_length;
+	int command_length = _strlen(command), directory_length;
 	struct stat stat_buffer;
 
 	if (stat(command_path, &stat_buffer) == 0)
@@ -31,7 +31,7 @@ char *get_command(char *command)
 	if (stat(command, &stat_buffer) == 0)
 	{
 		free(command_path);
-		command_path = strdup(command);
+		command_path = _strdup(command);
 		return (command_path);
 	}
 	path = getenv("PATH");
@@ -40,17 +40,17 @@ char *get_command(char *command)
 		free(command_path);
 		return (NULL);
 	}
-	path_copy = strdup(path);
+	path_copy = _strdup(path);
 	path_token = strtok(path_copy, ":");
 	free(command_path);
 	while (path_token != NULL)
 	{
-		directory_length = strlen(path_token);
+		directory_length = _strlen(path_token);
 		command_path = malloc(command_length + directory_length + 2);
-		strcpy(command_path, path_token);
-		strcat(command_path, "/");
-		strcat(command_path, command);
-		strcat(command_path, "\0");
+		_strcpy(command_path, path_token);
+		_strcat(command_path, "/");
+		_strcat(command_path, command);
+		_strcat(command_path, "\0");
 		if (stat(command_path, &stat_buffer) == 0)
 		{
 			free(path_copy);
@@ -76,7 +76,7 @@ int execute_command(char **arguments)
 
 	if (arguments == NULL)
 		return (-1);
-	arg_copy = strdup(arguments[0]);
+	arg_copy = _strdup(arguments[0]);
 	command = get_command(arg_copy);
 	if (command == NULL)
 		return (-1);
