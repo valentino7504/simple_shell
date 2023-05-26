@@ -28,6 +28,12 @@ char *get_command(char *command)
 
 	if (stat(command_path, &stat_buffer) == 0)
 		return (command_path);
+	if (stat(command, &stat_buffer) == 0)
+	{
+		free(command_path);
+		command_path = strdup(command);
+		return (command_path);
+	}
 	path = getenv("PATH");
 	if (!path)
 	{
@@ -54,11 +60,6 @@ char *get_command(char *command)
 		path_token = strtok(NULL, ":");
 	}
 	free(path_copy);
-	if (stat(command, &stat_buffer) == 0)
-	{
-		command_path = strdup(command);
-		return (command_path);
-	}
 	return (NULL);
 }
 /**
