@@ -8,15 +8,18 @@
 int main(int argc, char *argv[])
 {
 	char *user_entry, **args;
+	int is_interactive = isatty(STDIN_FILENO);
 
 	(void)argc;
 	while (1)
 	{
-		printf("$ ");
+		if (is_interactive)
+			printf("$ ");
 		user_entry = read_user_input();
 		if (user_entry == NULL)
 		{
-			printf("\n");
+			if (is_interactive)
+				printf("\n");
 			return (0);
 		}
 		if (strcmp(user_entry, "exit") == 0)
