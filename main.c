@@ -7,29 +7,28 @@
  */
 int main(int argc, char *argv[])
 {
-	char *prompt = "$", *user_entry, **args;
-	int token_count = 0, i;
+	char *user_entry, **args;
 
 	(void)argc;
 	while (1)
 	{
-		printf("%s ", prompt);
+		printf("$ ");
 		user_entry = read_user_input();
 		if (user_entry == NULL)
 		{
 			printf("\n");
-			exit(EXIT_SUCCESS);
+			return (0);
 		}
 		if (strcmp(user_entry, "exit") == 0)
-			exit(EXIT_SUCCESS);
+		{
+			free(user_entry);
+			break;
+		}
 		args = tokenize(user_entry);
 		if (execute_command(args) == -1)
 			fprintf(stderr, "%s: No such file or directory\n", argv[0]);
-		for (i = 0; args[i] != NULL; i++)
-			token_count++;
-		free_args(args, token_count);
+		free_args(args);
 		free(user_entry);
-		token_count = 0;
 	}
 	return (0);
 }

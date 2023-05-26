@@ -1,26 +1,42 @@
 #include "main.h"
 /**
+ * prepend_bin - adds /bin/ to the beginning of a string
+ * @command: the string
+ * Return: the modified string
+ */
+char *prepend_bin(char *command)
+{
+	char *command_path = NULL;
+	int command_length = strlen(command);
+
+	command_path = malloc(5 + command_length + 1);
+	strcpy(command_path, "/bin/");
+	strcat(command_path, command);
+	strcat(command_path, "\0");
+	return (command_path);
+}
+/**
  * get_command - gets the location for a command
  * @command: the command
  * Return: the command path
  */
 char *get_command(char *command)
 {
-	char *path, *path_copy, *path_token, *command_path;
+	char *path, *path_copy, *path_token, *command_path = prepend_bin(command);
 	int command_length = strlen(command), directory_length;
 	struct stat stat_buffer;
 
-	command_path = malloc(5 + command_length + 1);
-	strcpy(command_path, "/bin/");
-	strcat(command_path, command);
 	if (stat(command_path, &stat_buffer) == 0)
 		return (command_path);
-	free(command_path);
 	path = getenv("PATH");
 	if (!path)
+	{
+		free(command_path);
 		return (NULL);
+	}
 	path_copy = strdup(path);
 	path_token = strtok(path_copy, ":");
+	free(command_path);
 	while (path_token != NULL)
 	{
 		directory_length = strlen(path_token);
@@ -39,7 +55,10 @@ char *get_command(char *command)
 	}
 	free(path_copy);
 	if (stat(command, &stat_buffer) == 0)
-		return (command);
+	{
+		command_path = strdup(command);
+		return (command_path);
+	}
 	return (NULL);
 }
 /**
@@ -50,7 +69,8 @@ char *get_command(char *command)
 int execute_command(char **arguments)
 {
 	pid_t pid;
-	char *command = get_command(arguments[0]);
+	char *arg_copy = strdup(arguments[0]);
+	char *command = get_command(arg_copy);
 	int status;
 
 	if (command == NULL)
@@ -58,6 +78,7 @@ int execute_command(char **arguments)
 	pid = fork();
 	if (pid == -1)
 	{
+		free(command);
 		perror("Failed to create child process\n");
 		return (-1);
 	}
@@ -65,11 +86,16 @@ int execute_command(char **arguments)
 	{
 		if (execve(command, arguments, NULL) == -1)
 		{
+			free(command);
 			perror("Failed to execute command");
 			return (-1);
 		}
 	}
 	else
+	{
 		waitpid(pid, &status, 0);
+		free(command);
+		free(arg_copy);
+	}
 	return (0);
 }

@@ -76,13 +76,12 @@ char *read_user_input()
 /**
  * free_args - frees up the argument list
  * @args: the argument list
- * @token_count: the number of arguments to be freed
  */
-void free_args(char **args, int token_count)
+void free_args(char **args)
 {
 	int i = 0;
 
-	for (i = 0; i < token_count; i++)
+	for (i = 0; args[i] != NULL; i++)
 		free(args[i]);
 	free(args);
 }
