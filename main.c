@@ -24,7 +24,7 @@ int main(__attribute__((unused)) int argc, char *argv[])
 			free(user_entry);
 			exit(status);
 		}
-		if (_strspn(user_entry, " \t\n") == (unsigned int) _strlen(user_entry))
+		if (_strspn(user_entry, " \n") == (unsigned int) _strlen(user_entry))
 		{
 			free(user_entry);
 			continue;
